@@ -1,0 +1,12 @@
+.addItem {
+    margin: 15px;
+}
+
+.addItem .btn {
+    background-color: indianred;
+    color:aliceblue;
+}
+
+.addItem input {
+    margin-right: 3px;
+}
