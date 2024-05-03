@@ -27,7 +27,7 @@ export default class AddItem extends React.Component {
 
   render() {
     return (
-      <form className="addItem d-flex" onSubmit={this.onSubmit}>
+      <form className="addItem lol d-flex" onSubmit={this.onSubmit}>
         <input
           type="text"
           value={this.state.label}
