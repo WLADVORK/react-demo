@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
@@ -9,76 +9,76 @@ import AddItem from '../add-item';
 
 import './app.css';
 
-export default class App extends Component{
+export default class App extends Component {
   maxId = 1;
 
-  state = {
-    todoData: [
-      this.createTodoItem('meow'),
-      this.createTodoItem('meow1'),
-      this.createTodoItem('meow228')
-    ]
-  };
-
-  createTodoItem(label) {
-    return {
-      label,
-      important: false,
-      done: false,
-      id: this.maxId++
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      todoData: [
+        this.createTodoItem('meow'),
+        this.createTodoItem('meow1'),
+        this.createTodoItem('meow228'),
+      ],
+    };
   }
 
   deleteItam = (id) => {
-    this.setState(({todoData}) => {
-      const idx = todoData.findIndex(el => el.id === id)
+    this.setState(({ todoData }) => {
+      const idx = todoData.findIndex((el) => el.id === id);
       const before = todoData.slice(0, idx);
       const after = todoData.slice(idx + 1);
       return {
-        todoData: [...before, ...after]
-      }
+        todoData: [...before, ...after],
+      };
     });
   };
 
   AddItem = (text) => {
     const newItem = this.createTodoItem(text);
-    this.setState(({todoData}) => {
-      return {
-        todoData: [...todoData, newItem]
-      }
-    })
+    this.setState(({ todoData }) => ({
+      todoData: [...todoData, newItem],
+    }));
   };
 
-  toogleProperty(arr, id, propName) {
-    const idx = arr.findIndex(el => el.id === id)
+  onToggleImportant = (id) => {
+    this.setState(() => ({
+      todoData: this.toogleProperty(id, 'important'),
+    }));
+  };
+
+  onToggleDone = (id) => {
+    this.setState(() => ({
+      todoData: this.toogleProperty(id, 'done'),
+    }));
+  };
+
+  toogleProperty = (id, propName) => {
+    const { todoData } = this.state;
+    const arr = todoData;
+    const idx = arr.findIndex((el) => el.id === id);
 
     const oldItem = arr[idx];
-    const newItem = {...oldItem, [propName]: !oldItem[propName]}
+    const newItem = { ...oldItem, [propName]: !oldItem[propName] };
 
     const before = arr.slice(0, idx);
     const after = arr.slice(idx + 1);
 
     return [...before, newItem, ...after];
-  }
+  };
 
-  onToggleImportant =  (id) => {
-    this.setState(({todoData}) => {
-      return {
-        todoData: this.toogleProperty(todoData, id, 'important')
-      }
-    })
-}
-
-  onToggleDone =  (id) => {
-    this.setState(({todoData}) => {
-      return {
-        todoData: this.toogleProperty(todoData, id, 'done')
-      }
-    })
+  createTodoItem(label) {
+    console.log('adsad');
+    return {
+      label,
+      important: false,
+      done: false,
+      id: this.maxId++,
+    };
   }
 
   render() {
-    const todoData = this.state.todoData;
+    const { todoData } = this.state;
     const doneCount = todoData.filter((el) => el.done === true).length;
     const todoCount = todoData.length - doneCount;
     return (
@@ -88,9 +88,14 @@ export default class App extends Component{
           <SearchPanel />
           <ItemStatusFilter />
         </div>
-  
-        <TodoList todos={this.state.todoData} onDeleted={this.deleteItam} onToggleDone={this.onToggleDone} onToggleImportant={this.onToggleImportant}/>
-        <AddItem onAdd={(text) => this.AddItem(text)}/>
+
+        <TodoList
+          todos={todoData}
+          onDeleted={this.deleteItam}
+          onToggleDone={this.onToggleDone}
+          onToggleImportant={this.onToggleImportant}
+        />
+        <AddItem onAdd={(text) => this.AddItem(text)} />
       </div>
     );
   }
